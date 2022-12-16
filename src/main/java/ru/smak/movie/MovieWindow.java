@@ -82,7 +82,6 @@ public class MovieWindow extends JFrame {
                     fps = (int) (FPS.getValue());
                     movie = new MovieMaker(frames, duration, fps);
                     movie.create();
-                    movie.show();
                 }
             }
         });
