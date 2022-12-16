@@ -4,6 +4,8 @@ import ru.smak.graphics.FractalPainter;
 import ru.smak.graphics.Plane;
 import ru.smak.gui.GraphicsPanel;
 import ru.smak.gui.MainWindow;
+import ru.smak.gui.Scaler;
+import ru.smak.gui.UndoRedoManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,9 +26,11 @@ public class MovieWindow extends JFrame {
     private JPanel container;
     private int fps, duration;
     private MovieMaker movie;
+    private Scaler scaler;
+    private UndoRedoManager undoRedoManager;
     public MovieWindow(MainWindow mainWindow){
         container = new JPanel();
-        GridLayout layout = new GridLayout(2,0,5,12);
+        GridLayout layout = new GridLayout(1,0,5,12);
         container.setBackground(Color.WHITE);
         container.setLayout(layout);
         controlPanel = new JPanel();
@@ -55,9 +59,15 @@ public class MovieWindow extends JFrame {
                 GraphicsPanel moviePanel = new GraphicsPanel();
                 moviePanel.setBackground(Color.WHITE);
                 FractalPainter fp = new FractalPainter((FractalPainter)mainWindow.getMainPanel().getAllPainters("class ru.smak.graphics.FractalPainter").get(0));
-                moviePanel.addPainter(fp);
+                for (FractalPainter fractalPainter:
+                     frames) {
+                    scaler = new Scaler(fractalPainter.getPlane());
+                    fractalPainter.getPlane().setWidth(container.getWidth()/frames.size());
+                    fractalPainter.getPlane().setHeight(container.getHeight());
+                    scaler.scale();
+                    moviePanel.addPainter(fractalPainter);
+                }
 
-                //BufferedImage img = moviePanel.get
                 //удаление кадра из списка ключевых кадров
                 moviePanel.addMouseListener(new MouseAdapter() {
                     @Override
@@ -83,14 +93,6 @@ public class MovieWindow extends JFrame {
                     movie = new MovieMaker(frames, duration, fps);
                     movie.create();
                 }
-            }
-        });
-
-        Play.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //видео запускается (кнопка доступна только после того, как видео создано)
-                movie.show();
             }
         });
 
