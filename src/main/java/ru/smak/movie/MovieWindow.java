@@ -26,7 +26,11 @@ public class MovieWindow extends JFrame {
     private MovieMaker movie;
     private Scaler scaler;
     private UndoRedoManager undoRedoManager;
+    private JProgressBar progressbar;
+    private JOptionPane optionPane;
     public MovieWindow(MainWindow mainWindow){
+        progressbar = new JProgressBar();
+        optionPane = new JOptionPane();
         container = new JPanel();
         GridLayout layout = new GridLayout(1,0,5,12);
         container.setBackground(Color.WHITE);
@@ -48,6 +52,7 @@ public class MovieWindow extends JFrame {
         controlPanel.setBackground(Color.WHITE);
         controlPanel.setLayout(glcp);
         frames = new ArrayList<FractalPainter>();
+        progressbar.setStringPainted(true);
 
         AddFile.addActionListener(new ActionListener() {
             @Override
@@ -86,13 +91,17 @@ public class MovieWindow extends JFrame {
         OK.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //видео начинает создаваться
-                if (frames.size() != 0) {
-                    duration = (int) (Duration.getValue());
-                    fps = (int) (FPS.getValue());
-                    movie = new MovieMaker(frames, duration, fps);
-                    movie.create();
-                }
+                progressbar.setValue(0);
+                new Thread(()-> {
+                    if (frames.size() != 0) {
+                        duration = (int) (Duration.getValue());
+                        fps = (int) (FPS.getValue());
+                        movie = new MovieMaker(frames, duration, fps);
+                        movie.create();
+                        progressbar.setValue(movie.getPercent());
+                    }
+                }).start();
+                optionPane.showMessageDialog(null, progressbar);
             }
         });
 

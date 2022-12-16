@@ -4,12 +4,14 @@ import org.jcodec.api.SequenceEncoder;
 import org.jcodec.common.io.NIOUtils;
 import org.jcodec.common.model.ColorSpace;
 import org.jcodec.common.model.Rational;
+import org.w3c.dom.events.Event;
 import ru.smak.graphics.Colorizer;
 import ru.smak.graphics.FractalPainter;
 import ru.smak.graphics.Plane;
 import ru.smak.gui.GraphicsPanel;
 import ru.smak.math.fractals.Fractal;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -32,6 +34,7 @@ public class MovieMaker {
      */
     private Colorizer color;
     private Fractal fractal;
+    private int percent;
     /**
      * Массив кадров, передаваемых пользователем.
      */
@@ -96,6 +99,7 @@ public class MovieMaker {
         }
     }
 
+
     //метод, который возвращает коэффициент - во сколько раз изменилась плоскость
     public double getCoeff(FractalPainter p1, FractalPainter p2){
         return Math.abs((p1.getPlane().getXMax()-p1.getPlane().getXMin())*(p1.getPlane().getYMax()-p1.getPlane().getYMin())
@@ -142,5 +146,9 @@ public class MovieMaker {
     }
     public void setTime(int time){
         this.time = time;
+    }
+
+    public int getPercent() {
+        return (int)((double)frames.size()*100/time/fps);
     }
 }
