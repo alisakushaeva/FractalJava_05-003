@@ -1,5 +1,6 @@
 package ru.smak.movie;
 
+import kotlin.Pair;
 import ru.smak.graphics.FractalPainter;
 import ru.smak.graphics.Plane;
 import ru.smak.gui.GraphicsPanel;
@@ -9,10 +10,7 @@ import ru.smak.gui.UndoRedoManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -64,6 +62,8 @@ public class MovieWindow extends JFrame {
                     scaler = new Scaler(fractalPainter.getPlane());
                     fractalPainter.getPlane().setWidth(container.getWidth()/frames.size());
                     fractalPainter.getPlane().setHeight(container.getHeight());
+                    fractalPainter.getPlane().setXEdges(new Pair<>(scaler.getXMin(),scaler.getXMax()));
+                    fractalPainter.getPlane().setYEdges(new Pair<>(scaler.getYMin(),scaler.getYMax()));
                     scaler.scale();
                     moviePanel.addPainter(fractalPainter);
                 }
@@ -93,6 +93,20 @@ public class MovieWindow extends JFrame {
                     movie = new MovieMaker(frames, duration, fps);
                     movie.create();
                 }
+            }
+        });
+
+        container.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                for (FractalPainter fractalPainter:
+                        frames) {
+                    scaler = new Scaler(fractalPainter.getPlane());
+                    fractalPainter.getPlane().setWidth(container.getWidth()/frames.size());
+                    fractalPainter.getPlane().setHeight(container.getHeight());
+                    scaler.scale();
+                }
+                container.repaint();
             }
         });
 
