@@ -42,7 +42,6 @@ public class MovieWindow extends JFrame {
         FPSlbl = new JLabel("FPS");
         Durationlbl = new JLabel("Duration");
         OK = new JButton("OK");
-        Play = new JButton("Play");
         setLayout(gl);
         controlPanel.setBackground(Color.WHITE);
         controlPanel.setLayout(glcp);
@@ -83,6 +82,7 @@ public class MovieWindow extends JFrame {
                     fps = (int) (FPS.getValue());
                     movie = new MovieMaker(frames, duration, fps);
                     movie.create();
+                    movie.show();
                 }
             }
         });
@@ -126,8 +126,6 @@ public class MovieWindow extends JFrame {
                 .addGap(8)
                 .addComponent(OK, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE)
                 .addGap(8)
-                .addComponent(Play, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE)
-                .addGap(8)
         );
 
         glcp.setVerticalGroup(glcp.createSequentialGroup()
@@ -144,8 +142,6 @@ public class MovieWindow extends JFrame {
                         .addComponent(Duration, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE)
                         .addGap(8)
                         .addComponent(OK, GroupLayout.Alignment.CENTER)
-                        .addGap(8)
-                        .addComponent(Play, GroupLayout.Alignment.CENTER)
                         .addGap(8)
                 )
                 .addGap(8)

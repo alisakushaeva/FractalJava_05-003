@@ -83,6 +83,17 @@ public class MovieMaker {
         for (int i = 0; i<frames.size();i++){
             images.add(frames.get(i).getBufferedImage());
         }
+        //создание видео:
+        AWTSequenceEncoder encoder = null;
+        try {
+            encoder = AWTSequenceEncoder.createSequenceEncoder(new File("video.mp4"), fps);
+            for (BufferedImage image : images) {
+                encoder.encodeImage(image);
+            }
+            encoder.finish();
+        } catch (Exception e) {
+            System.out.println("Fail to generate video!");
+        }
     }
 
     //метод, который возвращает коэффициент - во сколько раз изменилась плоскость
@@ -131,19 +142,5 @@ public class MovieMaker {
     }
     public void setTime(int time){
         this.time = time;
-    }
-
-    public void show(){
-        AWTSequenceEncoder encoder = null;
-        try {
-            encoder = AWTSequenceEncoder.createSequenceEncoder(new File("video.mp4"), fps);
-            for (BufferedImage image : images) {
-                    encoder.encodeImage(image);
-            }
-            encoder.finish();
-        } catch (Exception e) {
-            System.out.println("Fail to generate video!");
-        }
-
     }
 }
